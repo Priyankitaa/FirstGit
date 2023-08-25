@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form</title>
+  <style>
+    * {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      margin: 0;
+    }
+    .main_wrapper {
+      display: flex;
+      height: 98vh;
+      justify-content: center;
+      background-image: url('https://images.unsplash.com/photo-1625225230517-7426c1be750c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80');
+    }
+    .form_wrapper {
+      background: #ffffff7f;
+      display: flex;
+      flex: 1;
+      border: 1px solid orange;
+      border-radius: 4px;
+      height: 400px;
+      max-width: 600px;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      padding: 10px;
+    }
+    .heading_wrap {
+      display: flex;
+      width: 100%;
+      padding: 5px 0px;
+      border-bottom: 1px solid grey;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      margin-top: 10px;
+      font-size: 14px;
+      color: rgb(233, 176, 51);
+      text-shadow: 1px 1px 1px whitesmoke;
+    }
+    h1 span {
+      font-weight: 400;
+      z-index: -1;
+      color: rgba(128, 128, 128, 0.366);
+      font-size: 44px !important;
+      letter-spacing: 4px;
+      opacity: 0.5;
+      position: absolute;
+      bottom: -10px;
+      text-shadow: none;
+    }
+    p {
+      font-size: 10px;
+    }
+    label {
+      font-family: 'Courier New', Courier, monospace;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .input_wrap {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      margin-bottom: 6px;
+    }
+    .date_time_input_wrap {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    input {
+      margin: 0;
+      padding: 0;
+      height: 24px;
+      color: gray;
+      border: 1px solid #e1dbdb;
+      border-radius: 2px;
+      outline: none;
+      padding: 0 4px;
+    }
+    .date_time_input_wrap input {
+      flex: 1;
+    }
+    .date_time_input_wrap input:first-child {
+      flex: 1;
+      margin-right: 4px;
+    }
+    #submit-btn {
+      width: 100%;
+      border: 1px solid orange;
+      background: orange;
+      height: 30px;
+      font-size: 12px;
+      border-radius: 2px;
+      color: #FFFF;
+    }
+  </style>
+</head>
+<body>
+    <div class="main_wrapper">
+      <form id="myform" class="form_wrapper" onsubmit="onSubmit()">
+        <div class="heading_wrap">
+          <h1><span>Call</span>Book a Call</h1>
+          <p>Book a call slot and our representative will call you within 1hr of selected time</p>
+        </div>
+          <div class="input_wrap">
+            <label for="name">Name:</label>
+            <input id="name" type="text" name="name"/>
+          </div>
+          <div class="input_wrap">
+            <label for="email">Email:</label>
+            <input id="email" type="email" name="email"/>
+          </div>
+          <div class="input_wrap">
+            <label for="phone">Phone:</label>
+            <input id="phone" type="tel" name="phone"/>
+          </div>
+          <div class="input_wrap date_time_input">
+            <label for="date">Time for Call:</label>
+            <div class="date_time_input_wrap">
+              <input id="date" type="date" name="date"/>
+              <input id="time" type="time" name="time"/>
+            </div>
+          </div>
+          <button id="submit-btn" type="submit">GET A CALL</button>
+      </form>
+    </div>
+    <script>
+
+        var submit = document.getElementById('submit-btn');
+        submit.addEventListener('click',onSubmit);
+
+      // Function to handle form submission
+      function onSubmit(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        // Get user input values
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        
+        // Store the user input in local storage as object
+        let myObj = {
+          Name : name,
+          Email : email,
+          Phone : phone,
+          Date : date,
+          Time : time
+        };
+
+        let myObj_serialized = JSON.stringify(myObj);
+        localStorage.setItem('UserDetails',myObj_serialized);
+        console.log(localStorage);
+      }
+
+      // Add event listener to the form submit event
+      document.getElementById('myform').addEventListener('submit', onSubmit);
+    </script>
+</body>
+</html>
