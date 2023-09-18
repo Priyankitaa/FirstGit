@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" type="text/css" href="expenseTracker.css">
+</head>
+<body>
+  <div class="form_wrapper">
+    <form id="myform" class="form_wrapper" onsubmit="onSubmit()">
+      <div class="heading_wrap">
+        <h1>Expense Tracker</h1>
+      </div>
+      <div class="input_wrap">
+        <label for="amount">Choose Expense Amount:</label>
+        <input type="number" name="amount" id="amount">
+      </div>
+      <div class="input_wrap">
+        <label for="description">Choose Description:</label>
+        <input type="text" name="description" id="description">
+      </div>
+      <div class="input_wrap">
+        <label for="category">Choose Category:</label>
+        <select name="category" id="category">
+          <option value="fuel">Fuel</option>
+          <option value="food">Food</option>
+          <option value="electricity">Electricity</option>
+          <option value="movie">Movie</option>
+          <option value="rent">Rent</option>
+        </select>
+      </div>
+      <button id="submit-btn" type="submit">Add Expense</button>
+    </form>
+  </div>
+  <div id="userInputDisplay" class="user_input_display">
+    <ul id="userDetailsList"></ul>
+  </div>
+  <script>
+
+    const submit = document.getElementById('submit-btn');
+    submit.addEventListener('click',onSubmit);
+
+    // Function to handle form submission
+    function onSubmit(event) {
+      event.preventDefault();
+
+      // Get user input values
+      const amount = document.getElementById('amount').value;
+      const description = document.getElementById('description').value;
+      const category = document.getElementById('category').value;
+
+      // Generate a unique key using the current timestamp
+      const timestamp = new Date().getTime();
+      const userKey = `user_${timestamp}`;
+      
+      // Store the user input in local storage using the generated key
+      localStorage.setItem(userKey, JSON.stringify({amount, description, category}));
+
+      // Create list items with user input
+      let userDetailsList = document.getElementById('userDetailsList');
+      let newUserDetails = document.createElement('li');
+      newUserDetails.setAttribute('data-userkey', userKey);
+      newUserDetails.innerHTML = `${amount} - ${description} - ${category}
+      <button class="delete-btn" onClick="deleteUser('${userKey}')">Delete Expense</button>
+      <button class="edit-btn" onClick="editUser('${userKey}')">Edit Expense</button> 
+      `;
+
+      // Append the new list item to the list
+      userDetailsList.appendChild(newUserDetails);
+
+      // Show the display
+      let userInputDisplay = document.getElementById('userInputDisplay');
+      userInputDisplay.style.display = 'block';
+      userInputDisplay.style.fontWeight = 'bold';
+
+      // Clear input fields after submission
+      document.getElementById('amount').value = '';
+      document.getElementById('description').value = '';
+      document.getElementById('category').value = '';
+    }
+
+    // Function to delete a user and their data
+    function deleteUser(userKey) {
+      localStorage.removeItem(userKey);
+
+      let userDetailsList = document.getElementById('userDetailsList');
+      let listItemToDelete = userDetailsList.querySelector(`li[data-userkey="${userKey}"]`);
+      userDetailsList.removeChild(listItemToDelete);
+    }
+
+    // Function to handle user editing
+    function editUser(userKey) {
+      let userData = JSON.parse(localStorage.getItem(userKey));
+
+      if(userData)
+      {
+        // populate the user fields with user data
+        document.getElementById('amount').value = userData.amount;
+        document.getElementById('description').value = userData.description;
+        document.getElementById('category').value = userData.category;
+
+        // Delete the user's existing data
+        localStorage.removeItem(userKey);
+
+        // Remove the user from the display
+        let userDetailsList = document.getElementById('userDetailsList')
+        let listItemToDelete = userDetailsList.querySelector(`li[data-userkey="${userKey}"]`);
+        userDetailsList.removeChild(listItemToDelete);
+      }
+    }
+    // Add event listener to the form submit event
+    document.getElementById('myform').addEventListener('submit', onSubmit);
+  </script>
+</body>
+</html>
